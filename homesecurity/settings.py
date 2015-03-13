@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'bootstrapform',
     'cms',
     'gunicorn',
+    'whitenoise',
 )
 
 MIDDLEWARE_CLASSES = (
