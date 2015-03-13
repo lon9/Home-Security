@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}IntruderList{% endblock title %}
+
+{% block extrahead %}
+<style>
+	table {
+		margin-top: 8px;
+	}
+</style>
+{% endblock extrahead%}
+
+{% block content %}
+	<h3 class="page-header">Intruder's list</h3>
+	<a href="{% url 'cms:intruder_add' %}" class="btn btn-default">Add</a>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>Intruder list</tr>
+		</thead>
+		<tbody>
+			{% for intruder in intruders %}
+			<tr>
+				<td>{{ intruder.name }}</td>
+				<td>{{ intruder.timeStamp }}</td>
+				<td>
+					<a href="{% url 'cms:intruder_mod' intruder_id=intruder.id %}" class="btn btn-default">Modify</a>
+					<a href="{% url 'cms:intruder_del' intruder_id=intruder.id %}" class="btn btn-default">Delete</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock content %}
