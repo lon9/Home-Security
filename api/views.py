@@ -39,14 +39,13 @@ def intruder_list(request):
 def arduino_post(request):
     intruder = Intruder()
     
-    if request.method=='POST':
-        form = IntruderForm(request.POST, instance=intruder)
-        if form.is_valid():
-            intruder = form.save(commit=False)
-            intruder.save()
-            data = "OK"
-        else:
-            data="error"
+    form = IntruderForm(request.POST, instance=intruder)
+    if form.is_valid():
+        intruder = form.save(commit=False)
+        intruder.save()
+        data = "OK"
+    else:
+        data="error"
     
     return render_json_response(request, data)
     
