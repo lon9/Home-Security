@@ -11,13 +11,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from django.conf.global_settings import LANGUAGE_CODE, TIME_ZONE,\
-    STATICFILES_DIRS, STATIC_ROOT
-import dj_database_url
-from socket import gethostname
+    STATICFILES_DIRS, STATIC_ROOT, SECURE_PROXY_SSL_HEADER
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-STATIC_ROOT = 'staticfiles'
-
-hostname = gethostname()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -27,13 +22,9 @@ SECRET_KEY = '@71lbdkiwo_wf!)h0og^#z022$48#7=_9ldccg^(=zb&219640'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #デバッグモードをするか判定
-if 'VAIO' in hostname:
-    DEBUG = True
-    TEMPLATE_DEBUG = True
-else:
-    DEBUG = False
-    TEMPLATE_DEBUG = False
-    ALLOWED_HOSTS = ['*']
+
+DEBUG = True
+TEMPLATE_DEBUG = True
 
 
 # Application definition
@@ -69,18 +60,13 @@ WSGI_APPLICATION = 'homesecurity.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 #データベースをどれにするか判定
-if 'VAIO' in hostname:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),   
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),   
     }
-else:
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -93,7 +79,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -104,3 +90,21 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.config();
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ALLOWED_HOSTS = ['*']
+
+STATIC_ROOT = 'staticfiles'
+
+DEBUG = False
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
+
